@@ -24,6 +24,8 @@ class _LocationDataState extends State<LocationData> {
   StreamSubscription<ServiceStatus>? _serviceStatusStreamSubscription;
   bool positionStreamStarted = false;
 
+  String gpsPosition = '';
+
   final _streamSub = <StreamSubscription<dynamic>>[];
   double? speedMps;
 
@@ -32,7 +34,7 @@ class _LocationDataState extends State<LocationData> {
     return Container(
       child: Column(
         children: [
-          Text("Speed is $speedMps"),
+          Text("Speed is $gpsPosition"),
           ElevatedButton(
             onPressed: () {
               getLocation();
@@ -52,11 +54,15 @@ class _LocationDataState extends State<LocationData> {
     }
 
     final position = await _geolocatorPlatform.getCurrentPosition();
+
     _updatePositionList(
       _PositionItemType.position,
       position.toString(),
     );
     debugPrint(position.toString());
+    setState(() {
+      gpsPosition = position.toString();
+    });
   }
 
   void _updatePositionList(_PositionItemType type, String displayValue) {
