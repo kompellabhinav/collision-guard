@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:collision_detection/dataScreen.dart';
+import 'package:collision_detection/gpsData.dart';
 import 'package:flutter/material.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 
@@ -23,7 +24,6 @@ class _MainScreenState extends State<MainScreen> {
   List<List<double>> dataList = [
     [0.0, 0.0, 0.0]
   ];
-  bool _streamActivity = false;
 
   //Test Methods
   void addToDataList(List<double>? newData) {
@@ -80,6 +80,13 @@ class _MainScreenState extends State<MainScreen> {
                 child: const Text("Stop"),
               ),
             ],
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => LocationData()));
+            },
+            child: const Text("GPS Data"),
           )
         ],
       ),
@@ -112,7 +119,6 @@ class _MainScreenState extends State<MainScreen> {
               if (event.x != 0 || event.y != 0 || event.z != 0) {
                 addToDataList(_userAccelerometerValues);
               }
-              debugPrint(_streamSubScriptions[0].toString());
             },
           );
         },
