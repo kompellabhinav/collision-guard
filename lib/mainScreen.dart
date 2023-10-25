@@ -23,12 +23,13 @@ class _MainScreenState extends State<MainScreen> {
 
   //Test Methods
   void addToDataList(List<double>? newData) {
-    double prevValue = 0;
     List<double>? roundedData =
         newData!.map((e) => double.parse(e.toStringAsFixed(2))).toList();
-    if (!dataList.contains(roundedData) && prevValue > roundedData[2]) {
+    if (dataList.length == 45) {
+      dataList = [];
+    }
+    if (!dataList.contains(roundedData)) {
       dataList.add(roundedData);
-      prevValue = roundedData[2];
     }
   }
 
