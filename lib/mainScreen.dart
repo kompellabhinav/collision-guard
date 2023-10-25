@@ -18,6 +18,20 @@ class _MainScreenState extends State<MainScreen> {
   final _streamSubScriptions =
       <StreamSubscription<dynamic>>[]; // Stream initialization
 
+  // Test Variables
+  List<List<double>?> dataList = [];
+
+  //Test Methods
+  void addToDataList(List<double>? newData) {
+    double prevValue = 0;
+    List<double>? roundedData =
+        newData!.map((e) => double.parse(e.toStringAsFixed(2))).toList();
+    if (!dataList.contains(roundedData) && prevValue > roundedData[2]) {
+      dataList.add(roundedData);
+      prevValue = roundedData[2];
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     // Functions to reduce huge decimals to single decimal point
@@ -41,6 +55,13 @@ class _MainScreenState extends State<MainScreen> {
           Text('User Accelerometer: $userAccerlerometer'),
           Text('Accelerometer: $accelerometer'),
           Text('Gyroscope: $gyroscope'),
+          ElevatedButton(
+            onPressed: () {
+              dispose();
+              debugPrint(dataList.toString());
+            },
+            child: const Text("Stop"),
+          )
         ],
       ),
     );
@@ -64,6 +85,10 @@ class _MainScreenState extends State<MainScreen> {
           setState(
             () {
               _userAccelerometerValues = <double>[event.x, event.y, event.z];
+              if (event.x != 0 || event.y != 0 || event.z != 0) {
+                addToDataList(_userAccelerometerValues);
+              }
+              debugPrint(_streamSubScriptions[0].toString());
             },
           );
         },
