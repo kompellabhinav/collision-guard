@@ -3,14 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 
-class LocationData extends StatefulWidget {
-  const LocationData({super.key});
-
-  @override
-  State<LocationData> createState() => _LocationDataState();
-}
-
-class _LocationDataState extends State<LocationData> {
+class LocationData {
   static const String _kLocationServicesDisabledMessage =
       'Location services are disabled.';
   static const String _kPermissionDeniedMessage = 'Permission denied.';
@@ -20,39 +13,19 @@ class _LocationDataState extends State<LocationData> {
 
   final GeolocatorPlatform _geolocatorPlatform = GeolocatorPlatform.instance;
   final List<_PositionItem> _positionItems = <_PositionItem>[];
-  StreamSubscription<Position>? _positionStreamSubscription;
-  StreamSubscription<ServiceStatus>? _serviceStatusStreamSubscription;
   bool positionStreamStarted = false;
 
   String gpsPosition = '';
 
-  final _streamSub = <StreamSubscription<dynamic>>[];
   double? speedMps;
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: [
-          Text("Speed is $gpsPosition"),
-          ElevatedButton(
-            onPressed: () {
-              getLocation();
-            },
-            child: const Text('Get GPS'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Future<void> getLocation() async {
+  Future<List<dynamic>> getLocation() async {
     final hasPermission = await _handlePermission();
 
     if (!hasPermission) {
-      return;
+      return [null, null];
     }
-
+    // Start the location stream.
     final position = await _geolocatorPlatform.getCurrentPosition();
 
     _updatePositionList(
@@ -60,14 +33,11 @@ class _LocationDataState extends State<LocationData> {
       position.toString(),
     );
     debugPrint(position.toString());
-    setState(() {
-      gpsPosition = position.toString();
-    });
+    return [position, position.speed];
   }
 
   void _updatePositionList(_PositionItemType type, String displayValue) {
     _positionItems.add(_PositionItem(type, displayValue));
-    setState(() {});
   }
 
   Future<bool> _handlePermission() async {

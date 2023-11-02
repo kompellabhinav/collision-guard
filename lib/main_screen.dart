@@ -1,6 +1,7 @@
 import 'dart:async';
 
-import 'package:collision_detection/dataScreen.dart';
+import 'package:collision_detection/data_collection.dart';
+import 'package:collision_detection/data_screen.dart';
 import 'package:collision_detection/gpsData.dart';
 import 'package:flutter/material.dart';
 import 'package:sensors_plus/sensors_plus.dart';
@@ -24,6 +25,14 @@ class _MainScreenState extends State<MainScreen> {
   List<List<double>> dataList = [
     [0.0, 0.0, 0.0]
   ];
+
+  final DataCollection collection = DataCollection();
+  LocationData positionData = LocationData();
+
+  List<dynamic> gpsData = [];
+  double latitude = 0;
+  double longitude = 0;
+  double speed = 0;
 
   //Test Methods
   void addToDataList(List<double>? newData) {
@@ -70,7 +79,7 @@ class _MainScreenState extends State<MainScreen> {
               ElevatedButton(
                 onPressed: () {
                   pauseStream();
-                  debugPrint(dataList.toString());
+
                   Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -81,19 +90,11 @@ class _MainScreenState extends State<MainScreen> {
               ),
             ],
           ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => LocationData()));
-            },
-            child: const Text("GPS Data"),
-          )
         ],
       ),
     );
   }
 
-  @override
   void pauseStream() {
     for (final subscription in _streamSubScriptions) {
       subscription.pause();
@@ -110,6 +111,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
+    DataCollection.getExternalDocumentPath();
     _streamSubScriptions.add(
       userAccelerometerEvents.listen(
         (event) {
@@ -119,6 +121,28 @@ class _MainScreenState extends State<MainScreen> {
               if (event.x != 0 || event.y != 0 || event.z != 0) {
                 addToDataList(_userAccelerometerValues);
               }
+
+              Future<void> updateGpsData() async {
+                final gpsData = await positionData.getLocation();
+                latitude = gpsData[0].latitude;
+                longitude = gpsData[0].longitude;
+                speed = gpsData[1] * 3.6; // convert to km/h
+                debugPrint(gpsData.toString());
+              }
+
+              updateGpsData();
+
+              _userAccelerometerValues = _userAccelerometerValues
+                  ?.map((double v) => v * 3.6)
+                  .toList(); // convert to km/h
+
+              collection.saveData(
+                "sensorData.txt",
+                _userAccelerometerValues,
+                latitude,
+                longitude,
+                speed,
+              );
             },
           );
         },
