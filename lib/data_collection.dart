@@ -41,7 +41,6 @@ class DataCollection {
       IOSink sink;
       // Open the file for appending
       sink = file.openWrite(mode: FileMode.append);
-
       // Write data to the file
       String data =
           '$time,${userAccelerometer![0]},${userAccelerometer[1]},${userAccelerometer[2]},$latitude,$longitude,$speed;';
