@@ -17,6 +17,7 @@ class _MainScreenState extends State<MainScreen> {
   List<double>? _accelerometerValues = [0.0, 0.0, 0.0];
   List<double>? _userAccelerometerValues = [0.0, 0.0, 0.0];
   List<double>? _gyroscopeValues = [0.0, 0.0, 0.0];
+  DateTime now = DateTime.now();
 
   final _streamSubScriptions =
       <StreamSubscription<dynamic>>[]; // Stream initialization
@@ -132,6 +133,8 @@ class _MainScreenState extends State<MainScreen> {
 
               updateGpsData();
 
+              now = DateTime.now();
+
               _userAccelerometerValues = _userAccelerometerValues
                   ?.map((double v) => v * 3.6)
                   .toList(); // convert to km/h
@@ -142,6 +145,7 @@ class _MainScreenState extends State<MainScreen> {
                 latitude,
                 longitude,
                 speed,
+                now,
               );
             },
           );

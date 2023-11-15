@@ -27,8 +27,14 @@ class DataCollection {
     return directory;
   }
 
-  Future<void> saveData(String fileName, List<double>? userAccelerometer,
-      double latitude, double longitude, double speed) async {
+  Future<void> saveData(
+    String fileName,
+    List<double>? userAccelerometer,
+    double latitude,
+    double longitude,
+    double speed,
+    DateTime time,
+  ) async {
     try {
       final path = await _localPath;
       File file = File('$path/$fileName');
@@ -38,7 +44,7 @@ class DataCollection {
 
       // Write data to the file
       String data =
-          '${userAccelerometer![0]},${userAccelerometer[1]},${userAccelerometer[2]},$latitude,$longitude,$speed;';
+          '$time,${userAccelerometer![0]},${userAccelerometer[1]},${userAccelerometer[2]},$latitude,$longitude,$speed;';
       sink.writeln(data);
       // Close the file when you're done
       sink.close();
