@@ -17,7 +17,7 @@ class _MainScreenState extends State<MainScreen> {
   List<double>? _accelerometerValues = [0.0, 0.0, 0.0];
   List<double>? _userAccelerometerValues = [0.0, 0.0, 0.0];
   List<double>? _gyroscopeValues = [0.0, 0.0, 0.0];
-  DateTime now = DateTime.now();
+  // DateTime now = DateTime.now();
 
   final _streamSubScriptions =
       <StreamSubscription<dynamic>>[]; // Stream initialization
@@ -27,13 +27,15 @@ class _MainScreenState extends State<MainScreen> {
     [0.0, 0.0, 0.0]
   ];
 
-  final DataCollection collection = DataCollection();
+  // final DataCollection collection = DataCollection();
   LocationData positionData = LocationData();
 
   List<dynamic> gpsData = [];
   double latitude = 0;
   double longitude = 0;
   double speed = 0;
+  int secondsLeft = 30;
+  late Timer timer;
 
   //Test Methods
   void addToDataList(List<double>? newData) {
@@ -80,12 +82,7 @@ class _MainScreenState extends State<MainScreen> {
               ElevatedButton(
                 onPressed: () {
                   pauseStream();
-
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              DataDisplay(dataList: dataList)));
+                  dialogBox();
                 },
                 child: const Text("Stop"),
               ),
@@ -109,9 +106,45 @@ class _MainScreenState extends State<MainScreen> {
     }
   }
 
+  void dialogBox() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Seconds: $secondsLeft'),
+          content: Text('Were you in an accident?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+                // Optionally perform any action when the user closes the dialog manually
+              },
+              child: Text('Close'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _startTimer() {
+    timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      setState(() {
+        if (secondsLeft > 0) {
+          secondsLeft--;
+        } else {
+          timer.cancel();
+          // Close the dialog or perform any other action when the timer expires
+          Navigator.pop(context);
+        }
+      });
+    });
+  }
+
   @override
   void initState() {
     super.initState();
+    _startTimer();
     DataCollection.getExternalDocumentPath();
     _streamSubScriptions.add(
       userAccelerometerEvents.listen(
@@ -123,32 +156,13 @@ class _MainScreenState extends State<MainScreen> {
                 addToDataList(_userAccelerometerValues);
               }
 
-              Future<void> updateGpsData() async {
-                final gpsData = await positionData.getLocation();
-                latitude = gpsData[0].latitude;
-                longitude = gpsData[0].longitude;
-                speed = gpsData[1] * 3.6; // convert to km/h
-                debugPrint(gpsData.toString());
-              }
-
-              updateGpsData();
-
-              now = DateTime.now();
-
               _userAccelerometerValues = _userAccelerometerValues
                   ?.map((double v) => v * 3.6)
                   .toList(); // convert to km/h
-
-              collection.saveData(
-                "sensorData.txt",
-                _userAccelerometerValues,
-                latitude,
-                longitude,
-                speed,
-                now,
-              );
             },
           );
+          if (_userAccelerometerValues![0] < -20 ||
+              _userAccelerometerValues![0] > 20) {}
         },
       ),
     );
