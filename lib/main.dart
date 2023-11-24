@@ -1,5 +1,5 @@
+import 'package:collision_detection/tabs.dart';
 import 'package:flutter/material.dart';
-import 'main_screen.dart';
 
 void main() {
   runApp(const MainApp());
@@ -12,7 +12,7 @@ class MainApp extends StatelessWidget {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        body: MainScreen(),
+        body: TabsController(),
       ),
     );
   }
