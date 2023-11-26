@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:collision_detection/pages/accident.dart';
+import 'package:telephony/telephony.dart';
 
 import 'package:collision_detection/data_collection.dart';
 import 'package:collision_detection/pages/data_screen.dart';
@@ -27,6 +29,7 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
     [0.0, 0.0, 0.0]
   ];
 
+  final Telephony telephony = Telephony.instance;
   final DataCollection collection = DataCollection();
   LocationData positionData = LocationData();
 
@@ -91,6 +94,15 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
               ),
             ],
           ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Accident()),
+              );
+            },
+            child: const Text("Send Text"),
+          )
         ],
       ),
     );
@@ -154,6 +166,11 @@ class _HomeState extends State<Home> with AutomaticKeepAliveClientMixin {
         },
       ),
     );
+    void askPermission() async {
+      bool? permissionsGranted = await telephony.requestPhoneAndSmsPermissions;
+    }
+
+    askPermission();
   }
 
   @override

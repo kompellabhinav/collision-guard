@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:collision_detection/utilities/contacts_util.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class Contacts extends StatefulWidget {
   const Contacts({super.key});
@@ -9,20 +12,64 @@ class Contacts extends StatefulWidget {
 }
 
 class _ContactsState extends State<Contacts> {
-  List<dynamic> contact = [
-    ["Abhinav", "9949379007"]
-  ];
+  late List<dynamic> contact;
+  DatabaseReference databaseReference =
+      FirebaseDatabase.instance.ref("contacts");
+
   final TextEditingController _name = TextEditingController();
   final TextEditingController _number = TextEditingController();
 
+  @override
+  void initState() {
+    retriveData();
+    setState(() {});
+    super.initState();
+  }
+
   void addContact(String name, String number) {
     contact.add([name, number]);
+    debugPrint("Add");
+    String data = "$name;$number";
+    databaseReference.push().set(data);
     setState(() {});
   }
 
-  void deleteContact(int index) {
-    contact.removeAt(index);
+  Future<void> retriveData() async {
+    contact = [];
+    DatabaseEvent data = await databaseReference.once();
+    Object? strData = data.snapshot.value;
+    if (strData != null) {
+      String jsonEn = jsonEncode(strData);
+
+      Map<String, dynamic> jsonDe = jsonDecode(jsonEn);
+      Iterable<dynamic> vals = jsonDe.values;
+      for (String val in vals) {
+        String nam = val.split(";")[0];
+        String num = val.split(";")[1];
+        contact.add([nam, num]);
+      }
+    }
     setState(() {});
+  }
+
+  Future<void> deleteContact(String name, String number) async {
+    debugPrint("Delete");
+    String fireName = "$name;$number";
+    String deleteKey = '';
+    DatabaseEvent data = await databaseReference.once();
+    Object? strData = data.snapshot.value;
+    String jsonEn = jsonEncode(strData);
+    Map<String, dynamic> jsonDe = jsonDecode(jsonEn);
+    for (final String key in jsonDe.keys) {
+      if (jsonDe[key] == fireName) {
+        deleteKey = key;
+      }
+    }
+    if (deleteKey != '') {
+      debugPrint('$deleteKey');
+      await databaseReference.child(deleteKey).remove();
+      retriveData();
+    }
   }
 
   @override
@@ -40,7 +87,8 @@ class _ContactsState extends State<Contacts> {
                 return ContactTile(
                   name: contact[index][0],
                   number: contact[index][1],
-                  deleteFunction: (context) => deleteContact(index),
+                  deleteFunction: (context) =>
+                      deleteContact(contact[index][0], contact[index][1]),
                 );
               },
             ),
