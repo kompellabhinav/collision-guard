@@ -25,7 +25,7 @@ class _SettingsState extends State<Settings> {
         child: ListView(
           children: <Widget>[
             ListTile(
-              title: Text("Categories"),
+              title: Text("Contacts"),
               trailing: Icon(Icons.keyboard_arrow_right_sharp),
               onTap: () {
                 Navigator.push(
