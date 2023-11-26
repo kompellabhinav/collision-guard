@@ -10,6 +10,7 @@ dependencies:
   fl_chart: ^0.64.0
   flutter:
     sdk: flutter
+  flutter_slidable: ^3.0.1
   geolocator: ^10.1.0
   path_provider: ^2.1.1
   permission_handler: ^11.0.1
