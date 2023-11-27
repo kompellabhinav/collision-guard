@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "91224261457",
+    "project_id": "collision-d",
+    "storage_bucket": "collision-d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:91224261457:android:41f3efd0e257d4c5aec970",
+        "android_client_info": {
+          "package_name": "com.example.collision_detection"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC5MCXV0Hset0WpkGDXFQBrz7nXx73A6ts"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
