@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:collision_detection/gpsData.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:telephony/telephony.dart';
@@ -15,9 +16,12 @@ class Accident extends StatefulWidget {
 class _AccidentState extends State<Accident> {
   int time = 15;
   late Timer countdown;
+  double latitude = 0;
+  double longitude = 0;
+  LocationData positionData = LocationData();
 
   //Text message code
-  final String _message = "I am in an accident. Please help";
+  String _message = "";
   final Telephony telephony = Telephony.instance;
 
   // Firebase Code
@@ -32,9 +36,17 @@ class _AccidentState extends State<Accident> {
     startTimer();
   }
 
+  Future<void> updateGpsData() async {
+    final gpsData = await positionData.getLocation();
+    latitude = gpsData[0].latitude;
+    longitude = gpsData[0].longitude;
+    debugPrint("sendtext");
+    sendText(latitude, longitude);
+  }
+
   void startTimer() {
     debugPrint("Timer Start");
-    countdown = Timer.periodic(Duration(seconds: 1), (timer) {
+    countdown = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (time > 0) {
         setState(() {
           time--;
@@ -44,9 +56,18 @@ class _AccidentState extends State<Accident> {
         // Timer reaches 0, perform any actions needed
         // For example, you might want to navigate to another screen
         // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => NextScreen()));
-        sendText();
+        updateGpsData();
         countdown.cancel(); // Cancel the timer when done
+        showEmergencyMessageDialog();
       }
+    });
+  }
+
+  void stopTimer() {
+    countdown.cancel();
+    Future.delayed(const Duration(seconds: 2), () {
+      // Go back to the previous page
+      Navigator.pop(context);
     });
   }
 
@@ -70,10 +91,19 @@ class _AccidentState extends State<Accident> {
     debugPrint(contacts.toString());
   }
 
-  void sendText() {
+  void sendText(double latitude, double longitude) {
+    latitude = double.parse(latitude.toStringAsFixed(3));
+    longitude = double.parse(longitude.toStringAsFixed(3));
+    _message =
+        "I am in an accident\nLatitude = $latitude\tLongitude = $longitude";
+    debugPrint(_message.length.toString());
     for (int i = 0; i < contacts.length; i++) {
       String nums = contacts[i][1];
-      telephony.sendSms(to: nums, message: _message);
+      telephony.sendSms(
+        to: nums,
+        message: _message,
+      );
+      debugPrint(nums);
     }
   }
 
@@ -82,6 +112,26 @@ class _AccidentState extends State<Accident> {
     // Cancel the timer to avoid memory leaks
     countdown.cancel();
     super.dispose();
+  }
+
+  void showEmergencyMessageDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Emergency Message Sent'),
+          content: const Text('Your emergency message has been sent.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context); // Close the dialog
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -126,6 +176,19 @@ class _AccidentState extends State<Accident> {
               ),
             ),
           ),
+          Center(
+            child: SizedBox(
+              height: 60,
+              width: 180,
+              child: ElevatedButton(
+                onPressed: stopTimer,
+                child: const Text(
+                  "I am safe!",
+                  style: TextStyle(color: Colors.white, fontSize: 30),
+                ),
+              ),
+            ),
+          )
         ],
       ),
     );

@@ -1,5 +1,6 @@
 import 'package:collision_detection/pages/contacts.dart';
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class Settings extends StatefulWidget {
   final String title;
@@ -19,14 +20,14 @@ class _SettingsState extends State<Settings> {
       height: 150,
       child: DecoratedBox(
         decoration: BoxDecoration(
-          color: Color.fromARGB(255, 28, 28, 30),
+          color: const Color.fromARGB(255, 28, 28, 30),
           borderRadius: BorderRadius.circular(18),
         ),
         child: ListView(
           children: <Widget>[
             ListTile(
-              title: Text("Contacts"),
-              trailing: Icon(Icons.keyboard_arrow_right_sharp),
+              title: const Text("Contacts"),
+              trailing: const Icon(Icons.keyboard_arrow_right_sharp),
               onTap: () {
                 Navigator.push(
                     context,
@@ -35,9 +36,18 @@ class _SettingsState extends State<Settings> {
                     ));
               },
             ),
+            ListTile(
+              title: const Text("Manage App Permissions"),
+              trailing: const Icon(Icons.settings),
+              onTap: openSettings,
+            ),
           ],
         ),
       ),
     );
+  }
+
+  void openSettings() async {
+    await openAppSettings();
   }
 }
