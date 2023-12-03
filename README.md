@@ -8,7 +8,9 @@ This is an Android App based on flutter which will be used to detect collisions.
 
 ### Home Screen
 
-![HomePage](lib/assets/home.png)
+<div align="center">
+  <img src="lib/assets/home.png" alt="First Image">
+</div>
 
 As you can see, this is the home screen of the app.
 
@@ -19,7 +21,9 @@ As you can see, this is the home screen of the app.
 
 ### Graph Screen
 
-![GraphPage](lib/assets/graph.png)
+<div align="center">
+  <img src="lib/assets/graph.png" alt="First Image">
+</div>
 
 This is the graph screen.
 
@@ -58,4 +62,49 @@ These images above correspond to the settings screen.
 - You also have an option to delete the contacts by sliding the contact to left.
 - All these contacts are saved on Firebase Realtime database as shown below.
 
-![Alt text](image.png)
+![Alt text](lib/assets/firebase.png)
+
+## Implementation
+
+![Alt text](lib/assets/flowchart.png)
+
+In the flow chart above:
+
+- When the app opens, the user has to click Start detecting. This is when the cycle begins.
+- The accelerometer data is sent to the ML model deployed on Firebase continuously.
+- As long as the prediction label is 0 (driving) we keep looping through the process.
+- If the prediction is 1 (accident), the system looks at the GPS speed and if that is also 0 at that moment, the app starts the 15 seconds timer.
+- If Stop timer is clicked before timer runs out, we go back to the home screen and detecting continues.
+- If it is not clicked, the timer takes the contact data from firebase and sends all of those contacts a text message with your coordinates.
+
+## Steps to run
+
+### Prerequisites
+
+- To run this file, you will need to install and setup flutter in your laptop.
+
+- The emulator which was best tested for this app is a Pixel 7 Pro with API 33.
+
+### 1. Clone the project
+
+```
+git clone https://github.com/kompellabhinav/collision-guard.git
+```
+
+### 2. Go to the project directory
+
+```
+cd collision-guard
+```
+
+### 3. Install the dependencies
+
+```
+flutter pub get
+```
+
+### 4. Run the flutter app
+
+```
+flutter run
+```
