@@ -9,7 +9,7 @@ This is an Android App based on flutter which will be used to detect collisions.
 ### Home Screen
 
 <div align="center">
-  <img src="lib/assets/home.png" alt="First Image">
+  <img src="lib/assets/images/home.png" alt="First Image">
 </div>
 
 As you can see, this is the home screen of the app.
@@ -22,7 +22,7 @@ As you can see, this is the home screen of the app.
 ### Graph Screen
 
 <div align="center">
-  <img src="lib/assets/graph.png" alt="First Image">
+  <img src="lib/assets/images/graph.png" alt="First Image">
 </div>
 
 This is the graph screen.
@@ -34,9 +34,9 @@ This is the graph screen.
 ### Accident Screen
 
 <div align="center">
-  <img src="lib/assets/acciddent.png" alt="First Image" width="32%">
-  <img src="lib/assets/messageSent.png" alt="Second Image" width="32%">
-  <img src="lib/assets/textScreen.png" alt="Second Image" width="32%">
+  <img src="lib/assets/images/acciddent.png" alt="First Image" width="32%">
+  <img src="lib/assets/images/messageSent.png" alt="Second Image" width="32%">
+  <img src="lib/assets/images/textScreen.png" alt="Second Image" width="32%">
 </div>
 
 The following screenshots belong to the Accident? page.
@@ -48,9 +48,9 @@ The following screenshots belong to the Accident? page.
 ### Settings Screen
 
 <div align="center">
-  <img src="lib/assets/settings.png" alt="First Image" width="32%">
-  <img src="lib/assets/contacts.png" alt="Second Image" width="32%">
-  <img src="lib/assets/permissions.png" alt="Second Image" width="32%">
+  <img src="lib/assets/images/settings.png" alt="First Image" width="32%">
+  <img src="lib/assets/images/contacts.png" alt="Second Image" width="32%">
+  <img src="lib/assets/images/permissions.png" alt="Second Image" width="32%">
 </div>
 
 These images above correspond to the settings screen.
@@ -63,13 +63,13 @@ These images above correspond to the settings screen.
 - All these contacts are saved on Firebase Realtime database as shown below.
 
 <div align="center">
-  <img src="lib/assets/firebase.png" alt="First Image">
+  <img src="lib/assets/images/firebase.png" alt="First Image">
 </div>
 
 ## Implementation
 
 <div align="center">
-  <img src="lib/assets/flowchart.png" alt="First Image">
+  <img src="lib/assets/images/flowchart.png" alt="First Image">
 </div>
 
 In the flow chart above:
