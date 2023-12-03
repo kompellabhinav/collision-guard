@@ -18,6 +18,7 @@ dependencies:
   permission_handler: ^11.0.1
   sensors_plus: ^3.1.0
   telephony: ^0.2.0
+  tflite_flutter: ^0.10.3
 
 dev_dependencies:
   flutter_test:
@@ -26,3 +27,4 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets: assets/

@@ -62,11 +62,15 @@ These images above correspond to the settings screen.
 - You also have an option to delete the contacts by sliding the contact to left.
 - All these contacts are saved on Firebase Realtime database as shown below.
 
-![Alt text](lib/assets/firebase.png)
+<div align="center">
+  <img src="lib/assets/firebase.png" alt="First Image">
+</div>
 
 ## Implementation
 
-![Alt text](lib/assets/flowchart.png)
+<div align="center">
+  <img src="lib/assets/flowchart.png" alt="First Image">
+</div>
 
 In the flow chart above:
 
@@ -77,7 +81,7 @@ In the flow chart above:
 - If Stop timer is clicked before timer runs out, we go back to the home screen and detecting continues.
 - If it is not clicked, the timer takes the contact data from firebase and sends all of those contacts a text message with your coordinates.
 
-## Steps to run
+## Steps to run (Method 1)
 
 ### Prerequisites
 
@@ -108,3 +112,11 @@ flutter pub get
 ```
 flutter run
 ```
+
+## Steps to run (Method 2)
+
+### Using apk
+
+- Find the file named **app-release.apk** on the root foler
+- Drag and drop the apk file on to the emulator.
+- Open all apps on the emulator and open app names collision_detection.
