@@ -6,7 +6,7 @@ This is an Android App based on flutter which will be used to detect collisions.
 
 ## Presentation Link
 
-[YouTube Presentation URL](https://youtu.be/ebsTt9OCRxs)
+[YouTube Presentation URL](https://youtu.be/7KluHnmRKhc)
 
 ## Screens
 
