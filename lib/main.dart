@@ -1,3 +1,4 @@
+import 'package:collision_detection/services/authentication_wrapper.dart';
 import 'package:collision_detection/tabs.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -24,8 +25,8 @@ class MainApp extends StatelessWidget {
           secondary: Colors.blue,
         ),
       ),
-      home: const Scaffold(
-        body: TabsController(),
+      home: Scaffold(
+        body: AuthenticationWrapper(),
       ),
     );
   }
